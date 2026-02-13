@@ -94,7 +94,7 @@ export default function TravelerLogin() {
 
           <div style={{ marginTop: '16px', padding: '12px', background: '#f7fafc', borderRadius: '6px', border: '1px solid #e2e8f0' }}>
             <p style={{ fontSize: '13px', color: '#718096', margin: 0, lineHeight: '1.6', fontFamily: 'Inter, sans-serif' }}>
-              By logging in, you accept our <Link href="/kvkk" style={{ color: '#4299e1', textDecoration: 'underline' }}>{t.kvkkPrivacyNotice}</Link>, <Link href="/privacy" style={{ color: '#4299e1', textDecoration: 'underline' }}>{t.privacyPolicyLink}</Link> {t.and} <Link href="/terms" style={{ color: '#4299e1', textDecoration: 'underline' }}>{t.termsOfServiceLink}</Link>.
+              By logging in, you accept our <Link href="/privacy" style={{ color: '#4299e1', textDecoration: 'underline' }}>{t.privacyPolicyLink}</Link> {t.and} <Link href="/terms" style={{ color: '#4299e1', textDecoration: 'underline' }}>{t.termsOfServiceLink}</Link>.
             </p>
           </div>
 
