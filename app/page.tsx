@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import Link from 'next/link'
 import { Plane, Handshake, BadgeDollarSign, CreditCard, BadgeCheck, ClipboardList, FileText, Search, Phone, ShieldCheck, Globe } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'

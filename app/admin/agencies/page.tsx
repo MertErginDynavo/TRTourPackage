@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { useState, useEffect } from 'react'
 import Navbar from '@/components/Navbar'
 import { CheckCircle, XCircle, Clock, Building2 } from 'lucide-react'
