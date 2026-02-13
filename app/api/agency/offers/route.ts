@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import prisma from '@/lib/prisma'
 
 export async function POST(request: Request) {
   try {
@@ -33,7 +31,7 @@ export async function POST(request: Request) {
       })
 
       // Send notification to traveler
-      const offerLink = `${process.env.NEXT_PUBLIC_SITE_URL}/offers/${body.requestId}`
+      const offerLink = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/offers/${body.requestId}`
       
       if (requestData.contactMethod === 'email') {
         // TODO: Send email notification

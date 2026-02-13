@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import prisma from '@/lib/prisma'
 
 export async function POST(request: Request) {
   try {
@@ -23,7 +21,7 @@ export async function POST(request: Request) {
     })
 
     // Generate unique link for viewing offers
-    const offerLink = `${process.env.NEXT_PUBLIC_SITE_URL}/offers/${newRequest.id}`
+    const offerLink = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/offers/${newRequest.id}`
 
     return NextResponse.json({ 
       ...newRequest, 
