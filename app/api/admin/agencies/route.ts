@@ -1,6 +1,31 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 
+// GET - List all agencies
+export async function GET() {
+  try {
+    const agencies = await prisma.agency.findMany({
+      orderBy: [
+        { verified: 'asc' }, // Unverified first
+        { createdAt: 'desc' }
+      ],
+      select: {
+        id: true,
+        companyName: true,
+        tursabLicense: true,
+        email: true,
+        verified: true,
+        createdAt: true,
+      }
+    })
+
+    return NextResponse.json(agencies)
+  } catch (error) {
+    return NextResponse.json({ error: 'Failed to fetch agencies' }, { status: 500 })
+  }
+}
+
+// POST - Create new agency (admin only)
 export async function POST(request: Request) {
   try {
     const body = await request.json()
@@ -34,22 +59,46 @@ export async function POST(request: Request) {
   }
 }
 
-export async function GET() {
+// PATCH - Approve or reject agency
+export async function PATCH(request: Request) {
   try {
-    const agencies = await prisma.agency.findMany({
-      select: {
-        id: true,
-        companyName: true,
-        tursabLicense: true,
-        email: true,
-        verified: true,
-        createdAt: true,
-      },
-      orderBy: { createdAt: 'desc' }
-    })
+    const body = await request.json()
+    const { agencyId, action } = body
 
-    return NextResponse.json(agencies)
+    if (action === 'approve') {
+      // Approve agency
+      const agency = await prisma.agency.update({
+        where: { id: agencyId },
+        data: { verified: true }
+      })
+
+      // TODO: Send approval email to agency
+      console.log('📧 Agency approved email:')
+      console.log(`To: ${agency.email}`)
+      console.log('Subject: Your Agency Has Been Approved!')
+
+      return NextResponse.json({ success: true, agency })
+    } else if (action === 'reject') {
+      // Get agency email before deletion
+      const agency = await prisma.agency.findUnique({
+        where: { id: agencyId }
+      })
+
+      // Delete rejected agency
+      await prisma.agency.delete({
+        where: { id: agencyId }
+      })
+
+      // TODO: Send rejection email
+      console.log('📧 Agency rejected email:')
+      console.log(`To: ${agency?.email}`)
+      console.log('Subject: Agency Registration Rejected')
+
+      return NextResponse.json({ success: true })
+    }
+
+    return NextResponse.json({ error: 'Invalid action' }, { status: 400 })
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to fetch agencies' }, { status: 500 })
+    return NextResponse.json({ error: 'Failed to update agency' }, { status: 500 })
   }
 }

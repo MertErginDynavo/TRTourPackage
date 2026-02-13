@@ -1,11 +1,79 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Navbar from '@/components/Navbar'
+import { CheckCircle, XCircle, Clock, Building2 } from 'lucide-react'
+
+interface Agency {
+  id: string
+  companyName: string
+  tursabLicense: string
+  email: string
+  verified: boolean
+  createdAt: string
+}
 
 export default function AdminAgencies() {
   const [showForm, setShowForm] = useState(false)
   const [success, setSuccess] = useState('')
+  const [agencies, setAgencies] = useState<Agency[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetchAgencies()
+  }, [])
+
+  const fetchAgencies = async () => {
+    try {
+      const res = await fetch('/api/admin/agencies')
+      if (res.ok) {
+        const data = await res.json()
+        setAgencies(data)
+      }
+    } catch (error) {
+      console.error('Failed to fetch agencies:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleApprove = async (agencyId: string) => {
+    try {
+      const res = await fetch('/api/admin/agencies', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ agencyId, action: 'approve' })
+      })
+
+      if (res.ok) {
+        setSuccess('Acenta onaylandı!')
+        fetchAgencies()
+        setTimeout(() => setSuccess(''), 3000)
+      }
+    } catch (error) {
+      console.error('Failed to approve agency:', error)
+    }
+  }
+
+  const handleReject = async (agencyId: string) => {
+    if (!confirm('Bu acentayı reddetmek istediğinizden emin misiniz?')) return
+
+    try {
+      const res = await fetch('/api/admin/agencies', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ agencyId, action: 'reject' })
+      })
+
+      if (res.ok) {
+        setSuccess('Acenta reddedildi ve silindi.')
+        fetchAgencies()
+        setTimeout(() => setSuccess(''), 3000)
+      }
+    } catch (error) {
+      console.error('Failed to reject agency:', error)
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -161,8 +229,155 @@ export default function AdminAgencies() {
         )}
 
         <div className="card">
-          <h2 style={{ fontSize: '20px', marginBottom: '16px', fontFamily: 'Manrope, sans-serif' }}>Mevcut Acenteler</h2>
-          <p style={{ color: '#718096', fontFamily: 'Inter, sans-serif' }}>Acenta listesi burada görüntülenecek...</p>
+          <h2 style={{ fontSize: '20px', marginBottom: '16px', fontFamily: 'Manrope, sans-serif' }}>
+            Onay Bekleyen Acenteler
+          </h2>
+          
+          {loading ? (
+            <p style={{ color: '#718096' }}>Yükleniyor...</p>
+          ) : (
+            <>
+              {agencies.filter(a => !a.verified).length === 0 ? (
+                <p style={{ color: '#718096', fontFamily: 'Inter, sans-serif' }}>
+                  Onay bekleyen acenta yok.
+                </p>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  {agencies.filter(a => !a.verified).map(agency => (
+                    <div 
+                      key={agency.id}
+                      style={{ 
+                        padding: '20px', 
+                        border: '1px solid #e2e8f0', 
+                        borderRadius: '8px',
+                        background: '#fffbeb'
+                      }}
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                            <Building2 className="w-5 h-5 text-[#e53e3e]" />
+                            <h3 style={{ fontSize: '18px', fontWeight: '600' }}>
+                              {agency.companyName}
+                            </h3>
+                            <span style={{ 
+                              padding: '4px 12px', 
+                              background: '#fef3c7', 
+                              color: '#92400e',
+                              borderRadius: '12px',
+                              fontSize: '12px',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '4px'
+                            }}>
+                              <Clock className="w-3 h-3" />
+                              Onay Bekliyor
+                            </span>
+                          </div>
+                          <p style={{ color: '#718096', fontSize: '14px', marginBottom: '4px' }}>
+                            TÜRSAB: {agency.tursabLicense}
+                          </p>
+                          <p style={{ color: '#718096', fontSize: '14px' }}>
+                            Email: {agency.email}
+                          </p>
+                          <p style={{ color: '#718096', fontSize: '12px', marginTop: '8px' }}>
+                            Kayıt: {new Date(agency.createdAt).toLocaleDateString('tr-TR')}
+                          </p>
+                        </div>
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                          <button
+                            onClick={() => handleApprove(agency.id)}
+                            style={{
+                              padding: '8px 16px',
+                              background: '#10b981',
+                              color: 'white',
+                              border: 'none',
+                              borderRadius: '6px',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '4px',
+                              fontSize: '14px'
+                            }}
+                          >
+                            <CheckCircle className="w-4 h-4" />
+                            Onayla
+                          </button>
+                          <button
+                            onClick={() => handleReject(agency.id)}
+                            style={{
+                              padding: '8px 16px',
+                              background: '#ef4444',
+                              color: 'white',
+                              border: 'none',
+                              borderRadius: '6px',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '4px',
+                              fontSize: '14px'
+                            }}
+                          >
+                            <XCircle className="w-4 h-4" />
+                            Reddet
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </>
+          )}
+        </div>
+
+        <div className="card" style={{ marginTop: '30px' }}>
+          <h2 style={{ fontSize: '20px', marginBottom: '16px', fontFamily: 'Manrope, sans-serif' }}>
+            Onaylı Acenteler
+          </h2>
+          
+          {agencies.filter(a => a.verified).length === 0 ? (
+            <p style={{ color: '#718096', fontFamily: 'Inter, sans-serif' }}>
+              Henüz onaylı acenta yok.
+            </p>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {agencies.filter(a => a.verified).map(agency => (
+                <div 
+                  key={agency.id}
+                  style={{ 
+                    padding: '16px', 
+                    border: '1px solid #e2e8f0', 
+                    borderRadius: '8px',
+                    background: '#f0fdf4'
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                    <Building2 className="w-4 h-4 text-[#10b981]" />
+                    <h3 style={{ fontSize: '16px', fontWeight: '600' }}>
+                      {agency.companyName}
+                    </h3>
+                    <span style={{ 
+                      padding: '2px 8px', 
+                      background: '#d1fae5', 
+                      color: '#065f46',
+                      borderRadius: '12px',
+                      fontSize: '11px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px'
+                    }}>
+                      <CheckCircle className="w-3 h-3" />
+                      Onaylı
+                    </span>
+                  </div>
+                  <p style={{ color: '#718096', fontSize: '13px' }}>
+                    TÜRSAB: {agency.tursabLicense} • {agency.email}
+                  </p>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
         </div>
       </div>

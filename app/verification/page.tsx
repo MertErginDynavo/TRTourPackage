@@ -1,13 +1,105 @@
 'use client'
 
+import { Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { Plane, Shield, BadgeCheck, Award } from 'lucide-react'
+import { Plane, Shield, BadgeCheck, Award, Clock, CheckCircle } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
 import LanguageSelector from '@/components/LanguageSelector'
 import Footer from '@/components/Footer'
 
-export default function VerificationPage() {
+function VerificationContent() {
   const { t } = useLanguage()
+  const searchParams = useSearchParams()
+  const type = searchParams.get('type') // 'agency' or null
+
+  // If agency registration confirmation
+  if (type === 'agency') {
+    return (
+      <div style={{ minHeight: '100vh', background: '#f8f9fa' }}>
+        {/* Navbar */}
+        <nav className="navbar">
+          <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <Plane size={48} color="#e53e3e" strokeWidth={2} />
+              <span style={{ 
+                fontSize: '24px', 
+                fontWeight: '600', 
+                color: '#1a202c',
+                letterSpacing: '-0.02em',
+                fontFamily: 'Manrope, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
+              }}>TRTourPackage</span>
+            </Link>
+            <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+              <LanguageSelector />
+            </div>
+          </div>
+        </nav>
+        
+        <div style={{ padding: '60px 20px' }}>
+          <div className="container" style={{ maxWidth: '700px' }}>
+            {/* Success Message */}
+            <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '80px', height: '80px', borderRadius: '50%', background: '#fef3c7', marginBottom: '20px' }}>
+                <Clock size={40} color="#f59e0b" strokeWidth={2} />
+              </div>
+              <h1 style={{ fontSize: '36px', marginBottom: '16px', color: '#2d3748', fontFamily: 'Manrope, sans-serif' }}>
+                Registration Received!
+              </h1>
+              <p style={{ fontSize: '18px', color: '#718096', lineHeight: '1.7', fontFamily: 'Inter, sans-serif' }}>
+                Thank you for registering. Your application is pending admin approval.
+              </p>
+            </div>
+
+            {/* Next Steps */}
+            <div className="card" style={{ marginBottom: '30px' }}>
+              <h2 style={{ fontSize: '24px', marginBottom: '20px', color: '#2d3748', fontFamily: 'Manrope, sans-serif' }}>
+                Next Steps
+              </h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <div style={{ display: 'flex', gap: '12px' }}>
+                  <CheckCircle size={24} color="#10b981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                  <p style={{ color: '#2d3748', margin: 0, fontFamily: 'Inter, sans-serif' }}>
+                    Your registration has been received
+                  </p>
+                </div>
+                <div style={{ display: 'flex', gap: '12px' }}>
+                  <Clock size={24} color="#f59e0b" style={{ flexShrink: 0, marginTop: '2px' }} />
+                  <p style={{ color: '#2d3748', margin: 0, fontFamily: 'Inter, sans-serif' }}>
+                    Our team will review your TÜRSAB license and business information
+                  </p>
+                </div>
+                <div style={{ display: 'flex', gap: '12px' }}>
+                  <CheckCircle size={24} color="#10b981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                  <p style={{ color: '#2d3748', margin: 0, fontFamily: 'Inter, sans-serif' }}>
+                    You will receive an email notification once approved
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Info Box */}
+            <div className="card" style={{ background: '#eff6ff', border: '1px solid #3b82f6' }}>
+              <p style={{ color: '#1e40af', margin: 0, lineHeight: '1.6', fontFamily: 'Inter, sans-serif' }}>
+                <strong>Note:</strong> Approval typically takes 24-48 hours. We verify all TÜRSAB licenses manually to ensure platform quality.
+              </p>
+            </div>
+
+            {/* Back to Home */}
+            <div style={{ textAlign: 'center', marginTop: '40px' }}>
+              <Link href="/" className="btn btn-primary" style={{ textDecoration: 'none' }}>
+                Back to Home
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        <Footer />
+      </div>
+    )
+  }
+
+  // Default verification info page
 
   return (
     <div style={{ minHeight: '100vh', background: '#f8f9fa' }}>
@@ -129,5 +221,13 @@ export default function VerificationPage() {
 
       <Footer />
     </div>
+  )
+}
+
+export default function VerificationPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <VerificationContent />
+    </Suspense>
   )
 }
