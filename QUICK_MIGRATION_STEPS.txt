@@ -1,0 +1,52 @@
+═══════════════════════════════════════════════════════════════
+  NEON DATABASE MIGRATION - HIZLI ADIMLAR
+═══════════════════════════════════════════════════════════════
+
+ADIM 1: Neon Dashboard'a Gidin
+─────────────────────────────────────────────────────────────
+https://console.neon.tech
+
+ADIM 2: Projenizi Seçin
+─────────────────────────────────────────────────────────────
+→ "trtourpackage" projesini tıklayın
+
+ADIM 3: SQL Editor'ü Açın
+─────────────────────────────────────────────────────────────
+→ Sol menüden "SQL Editor" veya "Query" sekmesine gidin
+
+ADIM 4: SQL'i Yapıştırın
+─────────────────────────────────────────────────────────────
+→ NEON_MIGRATION.sql dosyasındaki TÜM SQL'i kopyalayın
+→ SQL Editor'e yapıştırın
+→ "Run" veya "Execute" butonuna tıklayın
+
+ADIM 5: Başarı Mesajını Kontrol Edin
+─────────────────────────────────────────────────────────────
+✅ "Migration completed successfully!" görmelisiniz
+✅ 6 tablo oluşturuldu
+✅ 2 demo kayıt eklendi
+
+ADIM 6: Vercel'de Redeploy
+─────────────────────────────────────────────────────────────
+→ Vercel Dashboard → Deployments
+→ ... → Redeploy
+
+ADIM 7: Test Edin
+─────────────────────────────────────────────────────────────
+→ https://trtourpackage.vercel.app
+→ Ana sayfa açılmalı
+→ Hata olmamalı
+
+═══════════════════════════════════════════════════════════════
+  DEMO HESAPLAR (Migration ile eklendi)
+═══════════════════════════════════════════════════════════════
+
+Traveler:
+  Email: traveler@example.com
+  Password: demo123
+
+Agency:
+  Email: demo@trtourpackage.com
+  Password: demo123
+
+═══════════════════════════════════════════════════════════════
