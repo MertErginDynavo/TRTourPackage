@@ -13,7 +13,6 @@ export default function Footer() {
           <Link href="/about">{t.aboutUs}</Link>
           <Link href="/faq">{t.faqTitle}</Link>
           <Link href="/verification">{t.verificationTitle}</Link>
-          <Link href="/agency/register" style={{ color: '#e53e3e', fontWeight: '600' }}>Join as Agency</Link>
           <Link href="/privacy">{t.privacyPolicy}</Link>
           <Link href="/terms">{t.termsOfService}</Link>
           <Link href="/contact">{t.contactUs}</Link>

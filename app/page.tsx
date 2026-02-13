@@ -53,34 +53,39 @@ export default function Home() {
               fontFamily: 'Manrope, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
             }}>TRTourPackage</span>
           </Link>
-          <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
             <LanguageSelector />
             <Link href="/traveler/login" style={{ 
               textDecoration: 'none', 
-              color: '#718096', 
-              fontSize: '15px',
+              padding: '10px 20px',
+              background: '#e53e3e',
+              color: 'white',
+              borderRadius: '6px',
+              fontSize: '14px',
               fontFamily: 'Inter, sans-serif',
               fontWeight: '500',
-              transition: 'color 0.2s'
-            }}>
+              transition: 'background 0.2s'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.background = '#c53030'}
+            onMouseLeave={(e) => e.currentTarget.style.background = '#e53e3e'}
+            >
               {t.travelerLogin}
             </Link>
             <Link href="/agency/login" style={{ 
               textDecoration: 'none', 
-              color: '#718096', 
-              fontSize: '15px',
+              padding: '10px 20px',
+              background: '#e53e3e',
+              color: 'white',
+              borderRadius: '6px',
+              fontSize: '14px',
               fontFamily: 'Inter, sans-serif',
               fontWeight: '500',
-              transition: 'color 0.2s'
-            }}>
+              transition: 'background 0.2s'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.background = '#c53030'}
+            onMouseLeave={(e) => e.currentTarget.style.background = '#e53e3e'}
+            >
               {t.agencyLogin}
-            </Link>
-            <Link href="/agency/register" className="btn btn-primary" style={{ 
-              textDecoration: 'none',
-              padding: '10px 20px',
-              fontSize: '14px'
-            }}>
-              Join as Agency
             </Link>
           </div>
         </div>
