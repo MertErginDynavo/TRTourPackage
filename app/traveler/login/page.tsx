@@ -77,9 +77,14 @@ export default function TravelerLogin() {
           </div>
 
           <div style={{ marginBottom: '24px' }}>
-            <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>
-              {t.password}
-            </label>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+              <label style={{ fontWeight: '500' }}>
+                {t.password}
+              </label>
+              <Link href="/forgot-password" style={{ fontSize: '13px', color: '#4299e1', textDecoration: 'none' }}>
+                Forgot Password?
+              </Link>
+            </div>
             <input 
               type="password" 
               name="password" 

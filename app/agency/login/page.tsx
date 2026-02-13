@@ -74,9 +74,14 @@ export default function AgencyLogin() {
             </div>
 
             <div style={{ marginBottom: '24px' }}>
-              <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>
-                Şifre
-              </label>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                <label style={{ fontWeight: '500' }}>
+                  Şifre
+                </label>
+                <Link href="/forgot-password" style={{ fontSize: '13px', color: '#4299e1', textDecoration: 'none' }}>
+                  Şifremi Unuttum
+                </Link>
+              </div>
               <input 
                 type="password" 
                 name="password" 

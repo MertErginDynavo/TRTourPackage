@@ -92,3 +92,15 @@ model Rating {
   
   @@unique([travelerId, agencyId])
 }
+
+model PasswordReset {
+  id              String   @id @default(cuid())
+  email           String
+  token           String   @unique
+  userType        String   // 'traveler' or 'agency'
+  expiresAt       DateTime
+  used            Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  
+  @@index([email, token])
+}
