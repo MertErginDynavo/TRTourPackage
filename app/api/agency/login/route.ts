@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
+import { verifyPassword } from '@/lib/auth'
 
 export async function POST(request: Request) {
   try {
@@ -13,8 +14,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })
     }
 
-    // Check password (plain text for demo - use bcrypt in production)
-    if (agency.password !== body.password) {
+    // Verify password using bcrypt
+    const isValidPassword = await verifyPassword(body.password, agency.password)
+    
+    if (!isValidPassword) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })
     }
 

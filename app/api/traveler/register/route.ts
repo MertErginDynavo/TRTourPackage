@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
+import { hashPassword } from '@/lib/auth'
 
 export async function POST(request: Request) {
   try {
@@ -13,11 +14,14 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Email already registered' }, { status: 400 })
     }
 
+    // Hash password before storing
+    const hashedPassword = await hashPassword(body.password)
+
     const traveler = await prisma.traveler.create({
       data: {
         name: body.name,
         email: body.email,
-        password: body.password, // In production, hash with bcrypt
+        password: hashedPassword,
         country: body.country,
       }
     })

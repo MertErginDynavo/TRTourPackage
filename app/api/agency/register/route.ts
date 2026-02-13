@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
+import { hashPassword } from '@/lib/auth'
 
 export async function POST(request: Request) {
   try {
@@ -28,6 +29,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid TÜRSAB license format' }, { status: 400 })
     }
 
+    // Hash password before storing
+    const hashedPassword = await hashPassword(body.password)
+
     // Create agency with verified=false (pending admin approval)
     const agency = await prisma.agency.create({
       data: {
@@ -35,7 +39,7 @@ export async function POST(request: Request) {
         tursabLicense: body.tursabLicense,
         address: body.address,
         email: body.email,
-        password: body.password, // TODO: Hash password in production
+        password: hashedPassword,
         whatsapp: body.whatsapp,
         website: body.website || null,
         verified: false, // Requires admin approval

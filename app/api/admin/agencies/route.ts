@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
+import { hashPassword } from '@/lib/auth'
 
 // GET - List all agencies
 export async function GET() {
@@ -39,6 +40,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Email already exists' }, { status: 400 })
     }
 
+    // Hash password before storing
+    const hashedPassword = await hashPassword(body.password)
+
     // Create agency with verified status
     const agency = await prisma.agency.create({
       data: {
@@ -46,7 +50,7 @@ export async function POST(request: Request) {
         tursabLicense: body.tursabLicense,
         address: body.address,
         email: body.email,
-        password: body.password, // In production, hash with bcrypt
+        password: hashedPassword,
         whatsapp: body.whatsapp,
         website: body.website || null,
         verified: true, // Auto-verified by admin
