@@ -1,0 +1,91 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Traveler {
+  id                String   @id @default(cuid())
+  name              String
+  email             String   @unique
+  password          String
+  country           String
+  createdAt         DateTime @default(now())
+  requests          Request[]
+  ratings           Rating[]
+}
+
+model Request {
+  id                String   @id @default(cuid())
+  travelerId        String
+  country           String
+  travelDates       String
+  numTravelers      Int
+  budgetRange       String?
+  interests         String?
+  contactMethod     String
+  contactValue      String
+  status            String   @default("pending")
+  requestSubmittedAt DateTime @default(now())
+  createdAt         DateTime @default(now())
+  traveler          Traveler @relation(fields: [travelerId], references: [id])
+  offers            Offer[]
+  contacts          Contact[]
+}
+
+model Agency {
+  id              String   @id @default(cuid())
+  companyName     String
+  tursabLicense   String   @unique
+  address         String
+  email           String   @unique
+  password        String
+  whatsapp        String
+  website         String?
+  verified        Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  offers          Offer[]
+  ratings         Rating[]
+  contacts        Contact[]
+}
+
+model Offer {
+  id              String   @id @default(cuid())
+  requestId       String
+  agencyId        String
+  packageTitle    String
+  description     String
+  includedServices String
+  excludedServices String
+  price           String
+  notes           String?
+  createdAt       DateTime @default(now())
+  request         Request  @relation(fields: [requestId], references: [id])
+  agency          Agency   @relation(fields: [agencyId], references: [id])
+}
+
+model Contact {
+  id              String   @id @default(cuid())
+  requestId       String
+  agencyId        String
+  status          String   @default("pending")
+  createdAt       DateTime @default(now())
+  request         Request  @relation(fields: [requestId], references: [id])
+  agency          Agency   @relation(fields: [agencyId], references: [id])
+}
+
+model Rating {
+  id              String   @id @default(cuid())
+  travelerId      String
+  agencyId        String
+  rating          Int
+  comment         String?
+  createdAt       DateTime @default(now())
+  traveler        Traveler @relation(fields: [travelerId], references: [id])
+  agency          Agency   @relation(fields: [agencyId], references: [id])
+  
+  @@unique([travelerId, agencyId])
+}

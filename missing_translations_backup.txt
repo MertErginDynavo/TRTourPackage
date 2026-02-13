@@ -1,0 +1,8 @@
+Bu dosya, kalan 6 dil için eksik çevirileri içerir.
+Şu diller için Request Form, Dashboard, Offers Page, Contact Page, Verification Page çevirileri eklenecek:
+- العربية (ar)
+- Italiano (it) - TAMAMLANDI
+- 中文 (zh)
+- 한국어 (ko)
+- 日本語 (ja)
+- Azərbaycan (az)
