@@ -48,6 +48,7 @@ model Agency {
   password        String
   whatsapp        String
   website         String?
+  logo            String?  // Cloudinary URL
   verified        Boolean  @default(false)
   createdAt       DateTime @default(now())
   offers          Offer[]
@@ -65,6 +66,7 @@ model Offer {
   excludedServices String
   price           String
   notes           String?
+  images          String?  // JSON array of Cloudinary URLs
   createdAt       DateTime @default(now())
   request         Request  @relation(fields: [requestId], references: [id])
   agency          Agency   @relation(fields: [agencyId], references: [id])

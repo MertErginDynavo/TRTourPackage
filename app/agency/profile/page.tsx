@@ -55,18 +55,49 @@ export default function AgencyProfile() {
           {/* Profile Header */}
           <div className="card" style={{ marginBottom: '24px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '24px' }}>
-              <div>
-                <h1 style={{ fontSize: '32px', marginBottom: '8px', fontFamily: 'Manrope, sans-serif' }}>
-                  {agency.companyName}
-                </h1>
-                <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
-                  <span className="badge" style={{ background: '#27ae60' }}>Doğrulanmış Acente</span>
-                  <span className="badge" style={{ background: '#4299e1' }}>Featured Agency</span>
+              <div style={{ display: 'flex', gap: '20px', alignItems: 'start' }}>
+                {agency.logo ? (
+                  <img
+                    src={agency.logo}
+                    alt={agency.companyName}
+                    style={{
+                      width: '80px',
+                      height: '80px',
+                      objectFit: 'cover',
+                      borderRadius: '8px',
+                      border: '2px solid #e2e8f0'
+                    }}
+                  />
+                ) : (
+                  <div style={{
+                    width: '80px',
+                    height: '80px',
+                    background: '#f8f9fa',
+                    borderRadius: '8px',
+                    border: '2px solid #e2e8f0',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '32px',
+                    fontWeight: '600',
+                    color: '#cbd5e0'
+                  }}>
+                    {agency.companyName.charAt(0)}
+                  </div>
+                )}
+                <div>
+                  <h1 style={{ fontSize: '32px', marginBottom: '8px', fontFamily: 'Manrope, sans-serif' }}>
+                    {agency.companyName}
+                  </h1>
+                  <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
+                    <span className="badge" style={{ background: '#27ae60' }}>Doğrulanmış Acente</span>
+                    <span className="badge" style={{ background: '#4299e1' }}>Featured Agency</span>
+                  </div>
                 </div>
               </div>
-              <button className="btn" style={{ background: '#f8f9fa', color: '#333', border: '1px solid #ddd' }}>
+              <Link href="/agency/profile/edit" className="btn" style={{ background: '#f8f9fa', color: '#333', border: '1px solid #ddd', textDecoration: 'none' }}>
                 Profili Düzenle
-              </button>
+              </Link>
             </div>
 
             {/* Stats */}
