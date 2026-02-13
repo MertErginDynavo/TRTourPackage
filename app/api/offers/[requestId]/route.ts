@@ -11,6 +11,7 @@ export async function GET(
       include: {
         agency: {
           select: {
+            id: true,
             companyName: true,
             tursabLicense: true,
             email: true,

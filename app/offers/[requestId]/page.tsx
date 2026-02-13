@@ -13,7 +13,9 @@ interface Offer {
   excludedServices: string
   price: string
   notes: string | null
+  agencyId: string
   agency: {
+    id: string
     companyName: string
     tursabLicense: string
     email: string
@@ -22,13 +24,35 @@ interface Offer {
   }
 }
 
+interface AgencyRating {
+  averageRating: string
+  totalRatings: number
+}
+
 export default function OffersPage({ params }: { params: { requestId: string } }) {
   const [offers, setOffers] = useState<Offer[]>([])
+  const [ratings, setRatings] = useState<Record<string, AgencyRating>>({})
 
   useEffect(() => {
     fetch(`/api/offers/${params.requestId}`)
       .then(res => res.json())
-      .then(data => setOffers(data))
+      .then(data => {
+        setOffers(data)
+        // Fetch ratings for each agency
+        data.forEach((offer: Offer) => {
+          fetch(`/api/agency/ratings/${offer.agencyId}`)
+            .then(res => res.json())
+            .then(ratingData => {
+              setRatings(prev => ({
+                ...prev,
+                [offer.agencyId]: {
+                  averageRating: ratingData.averageRating,
+                  totalRatings: ratingData.totalRatings
+                }
+              }))
+            })
+        })
+      })
   }, [params.requestId])
 
   return (
@@ -53,8 +77,11 @@ export default function OffersPage({ params }: { params: { requestId: string } }
                 </div>
                 <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', fontSize: '14px', color: '#718096', fontFamily: 'Inter, sans-serif' }}>
                   <span>📋 TURSAB: {offer.agency.tursabLicense}</span>
-                  <span>⏱️ Avg Response: 4.5 hours</span>
-                  <span>⭐ 4.8 (127 ratings)</span>
+                  {ratings[offer.agencyId] && (
+                    <span>
+                      ⭐ {ratings[offer.agencyId].averageRating} ({ratings[offer.agencyId].totalRatings} ratings)
+                    </span>
+                  )}
                 </div>
               </div>
 
@@ -89,7 +116,7 @@ export default function OffersPage({ params }: { params: { requestId: string } }
                 <p style={{ fontSize: '14px', color: '#718096', marginBottom: '16px', fontFamily: 'Inter, sans-serif' }}>
                   Contact the agency directly via WhatsApp or Email to proceed with your booking.
                 </p>
-                <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '16px' }}>
                   <a 
                     href={`https://wa.me/${offer.agency.whatsapp.replace(/[^0-9]/g, '')}?text=Hello, I'm interested in your tour package: ${encodeURIComponent(offer.packageTitle)}`}
                     target="_blank"
@@ -117,6 +144,13 @@ export default function OffersPage({ params }: { params: { requestId: string } }
                       🌐 Visit Website
                     </a>
                   )}
+                  <Link
+                    href={`/traveler/rate/${offer.agencyId}`}
+                    className="btn"
+                    style={{ textDecoration: 'none', background: '#fef3c7', color: '#92400e', border: '1px solid #fbbf24' }}
+                  >
+                    ⭐ Rate Agency
+                  </Link>
                 </div>
                 <div style={{ marginTop: '16px', padding: '12px', background: '#fff3cd', borderRadius: '6px', border: '1px solid #ffc107' }}>
                   <p style={{ fontSize: '13px', color: '#856404', margin: 0 }}>

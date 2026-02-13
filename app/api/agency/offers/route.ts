@@ -2,6 +2,28 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { sendEmail, sendWhatsApp, emailTemplates } from '@/lib/notifications'
 
+// GET - Get agency's offers
+export async function GET(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url)
+    const agencyId = searchParams.get('agencyId')
+
+    if (!agencyId) {
+      return NextResponse.json({ error: 'Agency ID required' }, { status: 400 })
+    }
+
+    const offers = await prisma.offer.findMany({
+      where: { agencyId },
+      orderBy: { createdAt: 'desc' }
+    })
+
+    return NextResponse.json(offers)
+  } catch (error) {
+    return NextResponse.json({ error: 'Failed to fetch offers' }, { status: 500 })
+  }
+}
+
+// POST - Create new offer
 export async function POST(request: Request) {
   try {
     const body = await request.json()

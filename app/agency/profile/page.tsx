@@ -8,19 +8,34 @@ import { Star, MapPin, Phone, Mail, Globe, Award } from 'lucide-react'
 
 export default function AgencyProfile() {
   const [agency, setAgency] = useState<any>(null)
+  const [ratings, setRatings] = useState<any>(null)
   const [stats, setStats] = useState({
     totalOffers: 0,
-    avgResponseTime: '4.5 hours',
-    rating: 4.8,
-    totalReviews: 127
+    avgResponseTime: '4.5 hours'
   })
 
   useEffect(() => {
     const agencyId = localStorage.getItem('agencyId')
     
+    // Fetch agency info
     fetch(`/api/agency/info/${agencyId}`)
       .then(res => res.json())
       .then(data => setAgency(data))
+
+    // Fetch ratings
+    fetch(`/api/agency/ratings/${agencyId}`)
+      .then(res => res.json())
+      .then(data => setRatings(data))
+
+    // Fetch offers count
+    fetch(`/api/agency/offers?agencyId=${agencyId}`)
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setStats(prev => ({ ...prev, totalOffers: data.length }))
+        }
+      })
+      .catch(() => {})
   }, [])
 
   if (!agency) {
@@ -58,7 +73,7 @@ export default function AgencyProfile() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', padding: '20px', background: '#f8f9fa', borderRadius: '8px' }}>
               <div style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: '24px', fontWeight: '600', color: '#2d3748', fontFamily: 'Manrope, sans-serif' }}>
-                  {stats.rating}
+                  {ratings ? ratings.averageRating : '0.0'}
                 </div>
                 <div style={{ fontSize: '13px', color: '#718096', fontFamily: 'Inter, sans-serif' }}>
                   <Star size={14} style={{ display: 'inline', marginRight: '4px' }} />
@@ -67,7 +82,7 @@ export default function AgencyProfile() {
               </div>
               <div style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: '24px', fontWeight: '600', color: '#2d3748', fontFamily: 'Manrope, sans-serif' }}>
-                  {stats.totalReviews}
+                  {ratings ? ratings.totalRatings : 0}
                 </div>
                 <div style={{ fontSize: '13px', color: '#718096', fontFamily: 'Inter, sans-serif' }}>
                   Yorumlar
@@ -91,6 +106,49 @@ export default function AgencyProfile() {
               </div>
             </div>
           </div>
+
+          {/* Ratings & Reviews */}
+          {ratings && ratings.ratings && ratings.ratings.length > 0 && (
+            <div className="card" style={{ marginBottom: '24px' }}>
+              <h2 style={{ fontSize: '20px', marginBottom: '16px', fontFamily: 'Manrope, sans-serif' }}>
+                Müşteri Yorumları ({ratings.totalRatings})
+              </h2>
+              <div style={{ display: 'grid', gap: '16px' }}>
+                {ratings.ratings.slice(0, 5).map((rating: any) => (
+                  <div key={rating.id} style={{ padding: '16px', background: '#f8f9fa', borderRadius: '8px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '8px' }}>
+                      <div>
+                        <div style={{ fontWeight: '600', marginBottom: '4px', fontFamily: 'Manrope, sans-serif' }}>
+                          {rating.traveler.name}
+                        </div>
+                        <div style={{ fontSize: '13px', color: '#718096', fontFamily: 'Inter, sans-serif' }}>
+                          {rating.traveler.country}
+                        </div>
+                      </div>
+                      <div style={{ display: 'flex', gap: '2px' }}>
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <Star
+                            key={star}
+                            size={16}
+                            fill={star <= rating.rating ? '#fbbf24' : 'none'}
+                            color={star <= rating.rating ? '#fbbf24' : '#cbd5e0'}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    {rating.comment && (
+                      <p style={{ color: '#4a5568', fontSize: '14px', fontFamily: 'Inter, sans-serif' }}>
+                        {rating.comment}
+                      </p>
+                    )}
+                    <div style={{ fontSize: '12px', color: '#a0aec0', marginTop: '8px', fontFamily: 'Inter, sans-serif' }}>
+                      {new Date(rating.createdAt).toLocaleDateString('tr-TR')}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Contact Info */}
           <div className="card" style={{ marginBottom: '24px' }}>
