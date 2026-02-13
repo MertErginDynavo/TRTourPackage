@@ -90,7 +90,7 @@ export default function AgencyLogin() {
 
             <div style={{ marginTop: '16px', padding: '12px', background: '#f7fafc', borderRadius: '6px', border: '1px solid #e2e8f0' }}>
               <p style={{ fontSize: '13px', color: '#718096', margin: 0, lineHeight: '1.6', fontFamily: 'Inter, sans-serif' }}>
-                Giriş yaparak <Link href="/privacy" style={{ color: '#4299e1', textDecoration: 'underline' }}>KVKK Aydınlatma Metni</Link>, <Link href="/privacy" style={{ color: '#4299e1', textDecoration: 'underline' }}>Gizlilik Politikası</Link> ve <Link href="/terms" style={{ color: '#4299e1', textDecoration: 'underline' }}>Kullanım Koşulları</Link>'nı kabul etmiş olursunuz.
+                Giriş yaparak <Link href="/kvkk" style={{ color: '#4299e1', textDecoration: 'underline' }}>KVKK Aydınlatma Metni</Link>, <Link href="/privacy" style={{ color: '#4299e1', textDecoration: 'underline' }}>Gizlilik Politikası</Link> ve <Link href="/terms" style={{ color: '#4299e1', textDecoration: 'underline' }}>Kullanım Koşulları</Link>'nı kabul etmiş olursunuz.
               </p>
             </div>
 
