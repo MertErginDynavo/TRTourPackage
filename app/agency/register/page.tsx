@@ -3,14 +3,11 @@
 import React from 'react'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useLanguage } from '@/contexts/LanguageContext'
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
-import { Building2, FileCheck, Mail, Lock, Phone, Globe, MapPin } from 'lucide-react'
+import Link from 'next/link'
+import { Plane, Building2, FileCheck, Mail, Lock, Phone, Globe, MapPin } from 'lucide-react'
 
 export default function AgencyRegister() {
   const router = useRouter()
-  const { t } = useLanguage()
   const [formData, setFormData] = useState({
     companyName: '',
     tursabLicense: '',
@@ -30,17 +27,17 @@ export default function AgencyRegister() {
 
     // Validation
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match')
+      setError('Şifreler eşleşmiyor')
       return
     }
 
     if (formData.password.length < 6) {
-      setError('Password must be at least 6 characters')
+      setError('Şifre en az 6 karakter olmalıdır')
       return
     }
 
     if (!formData.tursabLicense.match(/^[A-Z]-\d{4,5}$/)) {
-      setError('Invalid TÜRSAB license format (e.g., A-1234)')
+      setError('Geçersiz TÜRSAB lisans formatı (örn: A-1234)')
       return
     }
 
@@ -66,219 +63,198 @@ export default function AgencyRegister() {
       if (response.ok) {
         router.push('/verification?type=agency')
       } else {
-        setError(data.error || 'Registration failed')
+        setError(data.error || 'Kayıt başarısız')
       }
     } catch (err) {
-      setError('Registration failed')
+      setError('Kayıt başarısız')
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] flex flex-col">
-      <Navbar showLanguageSelector={false} />
-      
-      <main className="flex-1 py-16">
-        <div className="max-w-2xl mx-auto px-4">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-[#e53e3e] rounded-full mb-4">
-              <Building2 className="w-8 h-8 text-white" />
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', background: '#f8f9fa' }}>
+      <div style={{ maxWidth: '600px', width: '100%' }}>
+        {/* Header */}
+        <div style={{ textAlign: 'center', marginBottom: '30px' }}>
+          <Link href="/" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '12px' }}>
+            <Plane size={48} color="#e53e3e" strokeWidth={2} />
+            <span style={{ 
+              fontSize: '24px', 
+              fontWeight: '600', 
+              color: '#1a202c',
+              letterSpacing: '-0.02em',
+              fontFamily: 'Manrope, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
+            }}>TRTourPackage</span>
+          </Link>
+          <h1 style={{ fontSize: '28px', marginTop: '20px', marginBottom: '8px', color: '#2d3748', fontFamily: 'Manrope, sans-serif' }}>
+            Acente Kaydı
+          </h1>
+          <p style={{ color: '#718096', fontFamily: 'Inter, sans-serif' }}>
+            Platformumuza katılın ve dünya çapında gezginlerle bağlantı kurun
+          </p>
+        </div>
+
+        {/* Form */}
+        <form onSubmit={handleSubmit} style={{ background: 'white', padding: '32px', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+          {error && (
+            <div style={{ padding: '12px', background: '#f8d7da', color: '#721c24', borderRadius: '6px', marginBottom: '20px', fontSize: '14px' }}>
+              {error}
             </div>
-            <h1 className="text-3xl font-semibold text-[#2d3748] mb-2">
-              Agency Registration
-            </h1>
-            <p className="text-[#718096]">
-              Join our platform and connect with travelers worldwide
+          )}
+
+          {/* Company Name */}
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', fontFamily: 'Manrope, sans-serif' }}>
+              Şirket Adı *
+            </label>
+            <input
+              type="text"
+              required
+              value={formData.companyName}
+              onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
+              placeholder="Acente Adınız"
+              style={{ width: '100%', padding: '12px', border: '1px solid #ddd', borderRadius: '6px', fontSize: '16px', fontFamily: 'Inter, sans-serif' }}
+            />
+          </div>
+
+          {/* TÜRSAB License */}
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', fontFamily: 'Manrope, sans-serif' }}>
+              TÜRSAB Lisans No *
+            </label>
+            <input
+              type="text"
+              required
+              value={formData.tursabLicense}
+              onChange={(e) => setFormData({ ...formData, tursabLicense: e.target.value.toUpperCase() })}
+              placeholder="A-1234"
+              style={{ width: '100%', padding: '12px', border: '1px solid #ddd', borderRadius: '6px', fontSize: '16px', fontFamily: 'Inter, sans-serif' }}
+            />
+            <p style={{ marginTop: '4px', fontSize: '12px', color: '#718096', fontFamily: 'Inter, sans-serif' }}>
+              Format: A-1234 veya B-12345
             </p>
           </div>
 
-          {/* Registration Form */}
-          <div className="bg-white rounded-lg shadow-sm p-8">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Company Name */}
-              <div>
-                <label className="block text-sm font-medium text-[#2d3748] mb-2">
-                  Company Name *
-                </label>
-                <div className="relative">
-                  <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#718096]" />
-                  <input
-                    type="text"
-                    required
-                    value={formData.companyName}
-                    onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#e53e3e] focus:border-transparent"
-                    placeholder="Your Travel Agency Name"
-                  />
-                </div>
-              </div>
-
-              {/* TÜRSAB License */}
-              <div>
-                <label className="block text-sm font-medium text-[#2d3748] mb-2">
-                  TÜRSAB License *
-                </label>
-                <div className="relative">
-                  <FileCheck className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#718096]" />
-                  <input
-                    type="text"
-                    required
-                    value={formData.tursabLicense}
-                    onChange={(e) => setFormData({ ...formData, tursabLicense: e.target.value.toUpperCase() })}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#e53e3e] focus:border-transparent"
-                    placeholder="A-1234"
-                  />
-                </div>
-                <p className="mt-1 text-xs text-[#718096]">
-                  Format: A-1234 or B-12345
-                </p>
-              </div>
-
-              {/* Address */}
-              <div>
-                <label className="block text-sm font-medium text-[#2d3748] mb-2">
-                  Address *
-                </label>
-                <div className="relative">
-                  <MapPin className="absolute left-3 top-3 w-5 h-5 text-[#718096]" />
-                  <textarea
-                    required
-                    value={formData.address}
-                    onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                    rows={3}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#e53e3e] focus:border-transparent"
-                    placeholder="Full business address in Turkey"
-                  />
-                </div>
-              </div>
-
-              {/* Email */}
-              <div>
-                <label className="block text-sm font-medium text-[#2d3748] mb-2">
-                  Email *
-                </label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#718096]" />
-                  <input
-                    type="email"
-                    required
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#e53e3e] focus:border-transparent"
-                    placeholder="agency@example.com"
-                  />
-                </div>
-              </div>
-
-              {/* WhatsApp */}
-              <div>
-                <label className="block text-sm font-medium text-[#2d3748] mb-2">
-                  WhatsApp *
-                </label>
-                <div className="relative">
-                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#718096]" />
-                  <input
-                    type="tel"
-                    required
-                    value={formData.whatsapp}
-                    onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#e53e3e] focus:border-transparent"
-                    placeholder="+90 555 123 4567"
-                  />
-                </div>
-              </div>
-
-              {/* Website (Optional) */}
-              <div>
-                <label className="block text-sm font-medium text-[#2d3748] mb-2">
-                  Website (Optional)
-                </label>
-                <div className="relative">
-                  <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#718096]" />
-                  <input
-                    type="url"
-                    value={formData.website}
-                    onChange={(e) => setFormData({ ...formData, website: e.target.value })}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#e53e3e] focus:border-transparent"
-                    placeholder="https://example.com"
-                  />
-                </div>
-              </div>
-
-              {/* Password */}
-              <div>
-                <label className="block text-sm font-medium text-[#2d3748] mb-2">
-                  Password *
-                </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#718096]" />
-                  <input
-                    type="password"
-                    required
-                    value={formData.password}
-                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#e53e3e] focus:border-transparent"
-                    placeholder="••••••••"
-                  />
-                </div>
-              </div>
-
-              {/* Confirm Password */}
-              <div>
-                <label className="block text-sm font-medium text-[#2d3748] mb-2">
-                  Confirm Password *
-                </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#718096]" />
-                  <input
-                    type="password"
-                    required
-                    value={formData.confirmPassword}
-                    onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#e53e3e] focus:border-transparent"
-                    placeholder="••••••••"
-                  />
-                </div>
-              </div>
-
-              {/* Error Message */}
-              {error && (
-                <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-                  <p className="text-sm text-red-600">{error}</p>
-                </div>
-              )}
-
-              {/* Info Box */}
-              <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                <p className="text-sm text-blue-800">
-                  Your registration will be reviewed by our team. You will receive an email once approved (typically within 24-48 hours).
-                </p>
-              </div>
-
-              {/* Submit Button */}
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-[#e53e3e] text-white py-3 rounded-lg font-medium hover:bg-[#c53030] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loading ? 'Submitting...' : 'Submit Registration'}
-              </button>
-
-              {/* Login Link */}
-              <p className="text-center text-sm text-[#718096]">
-                Already have an account?{' '}
-                <a href="/agency/login" className="text-[#e53e3e] hover:underline">
-                  Login here
-                </a>
-              </p>
-            </form>
+          {/* Address */}
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', fontFamily: 'Manrope, sans-serif' }}>
+              Adres *
+            </label>
+            <textarea
+              required
+              value={formData.address}
+              onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+              rows={3}
+              placeholder="Türkiye'deki tam iş adresi"
+              style={{ width: '100%', padding: '12px', border: '1px solid #ddd', borderRadius: '6px', fontSize: '16px', fontFamily: 'Inter, sans-serif', resize: 'vertical' }}
+            />
           </div>
-        </div>
-      </main>
 
-      <Footer />
+          {/* Email */}
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', fontFamily: 'Manrope, sans-serif' }}>
+              E-posta *
+            </label>
+            <input
+              type="email"
+              required
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              placeholder="acente@example.com"
+              style={{ width: '100%', padding: '12px', border: '1px solid #ddd', borderRadius: '6px', fontSize: '16px', fontFamily: 'Inter, sans-serif' }}
+            />
+          </div>
+
+          {/* WhatsApp */}
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', fontFamily: 'Manrope, sans-serif' }}>
+              WhatsApp *
+            </label>
+            <input
+              type="tel"
+              required
+              value={formData.whatsapp}
+              onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
+              placeholder="+90 555 123 4567"
+              style={{ width: '100%', padding: '12px', border: '1px solid #ddd', borderRadius: '6px', fontSize: '16px', fontFamily: 'Inter, sans-serif' }}
+            />
+          </div>
+
+          {/* Website */}
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', fontFamily: 'Manrope, sans-serif' }}>
+              Website (Opsiyonel)
+            </label>
+            <input
+              type="url"
+              value={formData.website}
+              onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+              placeholder="https://example.com"
+              style={{ width: '100%', padding: '12px', border: '1px solid #ddd', borderRadius: '6px', fontSize: '16px', fontFamily: 'Inter, sans-serif' }}
+            />
+          </div>
+
+          {/* Password */}
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', fontFamily: 'Manrope, sans-serif' }}>
+              Şifre *
+            </label>
+            <input
+              type="password"
+              required
+              value={formData.password}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              placeholder="••••••••"
+              style={{ width: '100%', padding: '12px', border: '1px solid #ddd', borderRadius: '6px', fontSize: '16px', fontFamily: 'Inter, sans-serif' }}
+            />
+          </div>
+
+          {/* Confirm Password */}
+          <div style={{ marginBottom: '24px' }}>
+            <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', fontFamily: 'Manrope, sans-serif' }}>
+              Şifre Tekrar *
+            </label>
+            <input
+              type="password"
+              required
+              value={formData.confirmPassword}
+              onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+              placeholder="••••••••"
+              style={{ width: '100%', padding: '12px', border: '1px solid #ddd', borderRadius: '6px', fontSize: '16px', fontFamily: 'Inter, sans-serif' }}
+            />
+          </div>
+
+          {/* Info Box */}
+          <div style={{ marginBottom: '20px', padding: '12px', background: '#e6f7ff', borderRadius: '6px', border: '1px solid #91d5ff' }}>
+            <p style={{ fontSize: '13px', color: '#0050b3', margin: 0, lineHeight: '1.6', fontFamily: 'Inter, sans-serif' }}>
+              Kaydınız ekibimiz tarafından incelenecektir. Onaylandığında e-posta alacaksınız (genellikle 24-48 saat içinde).
+            </p>
+          </div>
+
+          {/* Submit Button */}
+          <button 
+            type="submit" 
+            disabled={loading}
+            className="btn btn-primary" 
+            style={{ width: '100%' }}
+          >
+            {loading ? 'Gönderiliyor...' : 'Kayıt Ol'}
+          </button>
+
+          {/* KVKK & Privacy */}
+          <div style={{ marginTop: '16px', padding: '12px', background: '#f7fafc', borderRadius: '6px', border: '1px solid #e2e8f0' }}>
+            <p style={{ fontSize: '13px', color: '#718096', margin: 0, lineHeight: '1.6', fontFamily: 'Inter, sans-serif' }}>
+              Kayıt olarak <Link href="/kvkk" style={{ color: '#4299e1', textDecoration: 'underline' }}>KVKK Aydınlatma Metni</Link>, <Link href="/privacy" style={{ color: '#4299e1', textDecoration: 'underline' }}>Gizlilik Politikası</Link> ve <Link href="/terms" style={{ color: '#4299e1', textDecoration: 'underline' }}>Kullanım Koşulları</Link>'nı kabul etmiş olursunuz.
+            </p>
+          </div>
+
+          {/* Login Link */}
+          <p style={{ textAlign: 'center', color: '#718096', fontSize: '14px', marginTop: '20px', fontFamily: 'Inter, sans-serif' }}>
+            Zaten hesabınız var mı? <Link href="/agency/login" style={{ color: '#e53e3e', textDecoration: 'none' }}>Giriş Yapın</Link>
+          </p>
+        </form>
+      </div>
     </div>
   )
 }
