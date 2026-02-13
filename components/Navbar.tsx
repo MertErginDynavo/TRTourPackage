@@ -6,9 +6,10 @@ import LanguageSelector from './LanguageSelector'
 interface NavbarProps {
   rightContent?: React.ReactNode
   showLinks?: boolean
+  showLanguageSelector?: boolean
 }
 
-export default function Navbar({ rightContent, showLinks = false }: NavbarProps) {
+export default function Navbar({ rightContent, showLinks = false, showLanguageSelector = true }: NavbarProps) {
   const { t } = useLanguage()
   
   return (
@@ -73,7 +74,7 @@ export default function Navbar({ rightContent, showLinks = false }: NavbarProps)
               >
                 Join as Agency
               </Link>
-              <LanguageSelector />
+              {showLanguageSelector && <LanguageSelector />}
             </>
           )}
           {rightContent && <div>{rightContent}</div>}

@@ -27,7 +27,7 @@ export default function AgencyAnalytics() {
 
   return (
     <div style={{ minHeight: '100vh', background: '#f8f9fa' }}>
-      <Navbar />
+      <Navbar showLanguageSelector={false} />
       
       <div style={{ padding: '60px 20px' }}>
         <div className="container">

@@ -105,7 +105,7 @@ export default function AdminAgencies() {
 
   return (
     <div style={{ minHeight: '100vh', background: '#f8f9fa' }}>
-      <Navbar />
+      <Navbar showLanguageSelector={false} />
       
       <div style={{ padding: '60px 20px' }}>
         <div className="container" style={{ maxWidth: '900px' }}>

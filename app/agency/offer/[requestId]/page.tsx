@@ -49,7 +49,7 @@ export default function CreateOffer({ params }: { params: { requestId: string } 
 
   return (
     <div style={{ minHeight: '100vh', background: '#f8f9fa' }}>
-      <Navbar />
+      <Navbar showLanguageSelector={false} />
       
       <div style={{ padding: '60px 20px' }}>
         <div className="container" style={{ maxWidth: '700px' }}>

@@ -76,7 +76,7 @@ export default function AgencyRegister() {
 
   return (
     <div className="min-h-screen bg-[#f8f9fa] flex flex-col">
-      <Navbar />
+      <Navbar showLanguageSelector={false} />
       
       <main className="flex-1 py-16">
         <div className="max-w-2xl mx-auto px-4">
