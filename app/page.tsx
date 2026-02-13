@@ -75,6 +75,13 @@ export default function Home() {
             }}>
               {t.agencyLogin}
             </Link>
+            <Link href="/agency/register" className="btn btn-primary" style={{ 
+              textDecoration: 'none',
+              padding: '10px 20px',
+              fontSize: '14px'
+            }}>
+              Join as Agency
+            </Link>
           </div>
         </div>
       </nav>

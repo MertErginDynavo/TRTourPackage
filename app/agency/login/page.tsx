@@ -94,8 +94,30 @@ export default function AgencyLogin() {
               </p>
             </div>
 
+            <div style={{ textAlign: 'center', marginTop: '20px', padding: '16px', background: '#f0fdf4', borderRadius: '8px', border: '1px solid #10b981' }}>
+              <p style={{ fontSize: '14px', color: '#065f46', marginBottom: '8px', fontWeight: '500' }}>
+                Henüz üye değil misiniz?
+              </p>
+              <Link 
+                href="/agency/register" 
+                style={{ 
+                  display: 'inline-block',
+                  padding: '10px 24px',
+                  background: '#10b981',
+                  color: 'white',
+                  borderRadius: '6px',
+                  textDecoration: 'none',
+                  fontSize: '14px',
+                  fontWeight: '600',
+                  transition: 'background 0.2s'
+                }}
+              >
+                Acente Olarak Kayıt Ol
+              </Link>
+            </div>
+
             <p style={{ textAlign: 'center', color: '#666', fontSize: '13px', marginTop: '20px', lineHeight: '1.6' }}>
-              Sadece TRTourPackage tarafından davet edilen ve doğrulanan seyahat acenteleri giriş yapabilir.
+              Kayıt sonrası başvurunuz 24-48 saat içinde değerlendirilecektir.
             </p>
           </form>
         </div>
