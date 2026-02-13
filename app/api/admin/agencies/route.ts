@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { hashPassword } from '@/lib/auth'
+import { sendEmail, emailTemplates } from '@/lib/notifications'
 
 // GET - List all agencies
 export async function GET() {
@@ -76,10 +77,12 @@ export async function PATCH(request: Request) {
         data: { verified: true }
       })
 
-      // TODO: Send approval email to agency
-      console.log('📧 Agency approved email:')
-      console.log(`To: ${agency.email}`)
-      console.log('Subject: Your Agency Has Been Approved!')
+      // Send approval email to agency
+      const template = emailTemplates.agencyApproved(agency.companyName)
+      await sendEmail({
+        to: agency.email,
+        ...template
+      })
 
       return NextResponse.json({ success: true, agency })
     } else if (action === 'reject') {
@@ -88,15 +91,19 @@ export async function PATCH(request: Request) {
         where: { id: agencyId }
       })
 
+      if (agency) {
+        // Send rejection email
+        const template = emailTemplates.agencyRejected(agency.companyName)
+        await sendEmail({
+          to: agency.email,
+          ...template
+        })
+      }
+
       // Delete rejected agency
       await prisma.agency.delete({
         where: { id: agencyId }
       })
-
-      // TODO: Send rejection email
-      console.log('📧 Agency rejected email:')
-      console.log(`To: ${agency?.email}`)
-      console.log('Subject: Agency Registration Rejected')
 
       return NextResponse.json({ success: true })
     }

@@ -63,6 +63,28 @@ https://$VERCEL_URL
 
 ---
 
+### 5. RESEND_API_KEY
+**Açıklama:** Email bildirimleri için Resend API key  
+**Değer:** Resend dashboard'dan alınan API key  
+**Environment:** Production, Preview
+
+```
+re_Wvrpi6sE_MN4DPeB1rRWKFn9fdW3WfRTj
+```
+
+---
+
+### 6. EMAIL_FROM
+**Açıklama:** Email gönderen adresi  
+**Değer:** Gönderen email adresi  
+**Environment:** Production, Preview
+
+```
+TRTourPackage <noreply@trtourpackage.com>
+```
+
+---
+
 ## 🟡 OPSİYONEL (Optional - Gelecekte Eklenebilir)
 
 ### 5. SMTP_HOST
@@ -153,6 +175,8 @@ Environment variables ekledikten sonra:
 
 1. ✅ `NODE_ENV` = `production`
 2. ✅ `NEXT_PUBLIC_APP_URL` = `https://trtourpackage.vercel.app`
+3. ✅ `RESEND_API_KEY` = `re_Wvrpi6sE_MN4DPeB1rRWKFn9fdW3WfRTj`
+4. ✅ `EMAIL_FROM` = `TRTourPackage <noreply@trtourpackage.com>`
 
 **Database variables Vercel Postgres oluşturduğunuzda otomatik eklenecek!**
 
@@ -175,7 +199,9 @@ Environment variables ekledikten sonra:
 | `POSTGRES_PRISMA_URL` | ✅ | ✅ | Vercel ekler |
 | `NODE_ENV` | ✅ | ❌ | `production` |
 | `NEXT_PUBLIC_APP_URL` | ✅ | ❌ | Vercel URL |
-| `SMTP_*` | ❌ | ❌ | Email için |
+| `RESEND_API_KEY` | ✅ | ❌ | Resend API key |
+| `EMAIL_FROM` | ✅ | ❌ | Email gönderen |
+| `SMTP_*` | ❌ | ❌ | Email için (eski) |
 | `ADMIN_EMAIL` | ❌ | ❌ | Bildirimler için |
 
 ---
@@ -195,11 +221,14 @@ Environment variables ekledikten sonra:
 Deployment öncesi:
 - [ ] `NODE_ENV` eklendi
 - [ ] `NEXT_PUBLIC_APP_URL` eklendi
+- [ ] `RESEND_API_KEY` eklendi
+- [ ] `EMAIL_FROM` eklendi
 - [ ] Vercel Postgres oluşturuldu
 - [ ] Database variables otomatik eklendi
 - [ ] Redeploy yapıldı
 - [ ] Site açılıyor
 - [ ] Database bağlantısı çalışıyor
+- [ ] Email bildirimleri çalışıyor
 
 ---
 

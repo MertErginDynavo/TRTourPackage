@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
+import { sendEmail, sendWhatsApp, emailTemplates } from '@/lib/notifications'
 
 export async function POST(request: Request) {
   try {
@@ -18,12 +19,19 @@ export async function POST(request: Request) {
       }
     })
 
-    // Get request details to send notification
+    // Get request details and agency info to send notification
     const requestData = await prisma.request.findUnique({
-      where: { id: body.requestId }
+      where: { id: body.requestId },
+      include: {
+        traveler: true
+      }
     })
 
-    if (requestData) {
+    const agency = await prisma.agency.findUnique({
+      where: { id: body.agencyId }
+    })
+
+    if (requestData && agency) {
       // Update request status to offers_ready
       await prisma.request.update({
         where: { id: body.requestId },
@@ -32,17 +40,25 @@ export async function POST(request: Request) {
 
       // Send notification to traveler
       const offerLink = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/offers/${body.requestId}`
+      const travelerName = requestData.traveler?.name || 'Traveler'
       
       if (requestData.contactMethod === 'email') {
-        // TODO: Send email notification
-        console.log(`📧 Email notification to: ${requestData.contactValue}`)
-        console.log(`Subject: New Tour Offer Available`)
-        console.log(`Link: ${offerLink}`)
+        // Send email notification
+        const template = emailTemplates.newOfferToTraveler(
+          travelerName,
+          agency.companyName,
+          offerLink
+        )
+        await sendEmail({
+          to: requestData.contactValue,
+          ...template
+        })
       } else if (requestData.contactMethod === 'whatsapp') {
-        // TODO: Send WhatsApp notification
-        console.log(`📱 WhatsApp notification to: ${requestData.contactValue}`)
-        console.log(`Message: You have received a new tour offer!`)
-        console.log(`Link: ${offerLink}`)
+        // Send WhatsApp notification
+        await sendWhatsApp({
+          to: requestData.contactValue,
+          message: `🎁 New Tour Offer!\n\n${agency.companyName} has submitted a tour offer for your request.\n\nView offer: ${offerLink}`
+        })
       }
     }
 
