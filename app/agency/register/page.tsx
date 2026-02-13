@@ -73,7 +73,7 @@ export default function AgencyRegister() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', background: '#f8f9fa' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px 20px', background: '#f8f9fa' }}>
       <div style={{ maxWidth: '600px', width: '100%' }}>
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '30px' }}>
