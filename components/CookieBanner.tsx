@@ -53,7 +53,7 @@ export default function CookieBanner() {
         alignItems: 'center'
       }}>
         <Link 
-          href="/agency/dashboard" 
+          href="/privacy" 
           style={{
             fontSize: '13px',
             color: '#4299e1',

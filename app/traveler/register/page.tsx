@@ -138,7 +138,7 @@ export default function TravelerRegister() {
                   style={{ marginTop: '3px', width: '16px', height: '16px', flexShrink: 0 }}
                 />
                 <span style={{ color: '#2d3748', lineHeight: '1.5' }}>
-                  {t.kvkkConsent} <Link href="/agency/dashboard" style={{ color: '#4299e1', textDecoration: 'underline' }}>{t.kvkkPrivacyNotice}</Link> {t.and} <Link href="/agency/dashboard" style={{ color: '#4299e1', textDecoration: 'underline' }}>{t.privacyPolicyLink}</Link>. <span style={{ color: '#e53e3e' }}>*</span>
+                  {t.kvkkConsent} <Link href="/kvkk" style={{ color: '#4299e1', textDecoration: 'underline' }}>{t.kvkkPrivacyNotice}</Link> {t.and} <Link href="/privacy" style={{ color: '#4299e1', textDecoration: 'underline' }}>{t.privacyPolicyLink}</Link>. <span style={{ color: '#e53e3e' }}>*</span>
                 </span>
               </label>
             </div>
@@ -165,7 +165,7 @@ export default function TravelerRegister() {
                   style={{ marginTop: '3px', width: '16px', height: '16px', flexShrink: 0 }}
                 />
                 <span style={{ color: '#718096', lineHeight: '1.5' }}>
-                  {t.cookieConsent} <Link href="/agency/dashboard" style={{ color: '#4299e1', textDecoration: 'underline' }}>{t.cookiePolicyLink}</Link>.
+                  {t.cookieConsent} <Link href="/privacy" style={{ color: '#4299e1', textDecoration: 'underline' }}>{t.cookiePolicyLink}</Link>.
                 </span>
               </label>
             </div>
